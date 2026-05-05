@@ -1339,8 +1339,6 @@ Bool
 InitValuatorClassDeviceStruct(DeviceIntPtr dev, int numAxes, Atom *labels,
                               int numMotionEvents, int mode)
 {
-    ValuatorClassPtr valc;
-
     BUG_RETURN_VAL(dev == NULL, FALSE);
     BUG_RETURN_VAL(numAxes == 0, FALSE);
 
@@ -1351,7 +1349,7 @@ InitValuatorClassDeviceStruct(DeviceIntPtr dev, int numAxes, Atom *labels,
         numAxes = MAX_VALUATORS;
     }
 
-    valc = AllocValuatorClass(NULL, numAxes);
+    ValuatorClassPtr valc = AllocValuatorClass(NULL, numAxes);
     if (!valc)
         return FALSE;
 
