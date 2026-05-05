@@ -739,9 +739,7 @@ CorePointerProc(DeviceIntPtr pDev, int what)
 void
 InitCoreDevices(void)
 {
-    int result;
-
-    result = AllocDevicePair(serverClient, "Virtual core",
+    int result = AllocDevicePair(serverClient, "Virtual core",
                              &inputInfo.pointer, &inputInfo.keyboard,
                              CorePointerProc, CoreKeyboardProc, TRUE);
     if (result != Success) {
