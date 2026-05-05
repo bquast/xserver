@@ -2195,11 +2195,6 @@ ProcGetKeyboardControl(ClientPtr client)
 int
 ProcBell(ClientPtr client)
 {
-    DeviceIntPtr keybd = PickKeyboard(client);
-    int base = keybd->kbdfeed->ctrl.bell;
-    int newpercent;
-    int rc;
-
     REQUEST(xBellReq);
     REQUEST_SIZE_MATCH(xBellReq);
 
@@ -2208,7 +2203,9 @@ ProcBell(ClientPtr client)
         return BadValue;
     }
 
-    newpercent = (base * stuff->percent) / 100;
+    DeviceIntPtr keybd = PickKeyboard(client);
+    int base = keybd->kbdfeed->ctrl.bell;
+    int newpercent = (base * stuff->percent) / 100;
     if (stuff->percent < 0)
         newpercent = base + newpercent;
     else
@@ -2219,7 +2216,7 @@ ProcBell(ClientPtr client)
              (!InputDevIsMaster(dev) && GetMaster(dev, MASTER_KEYBOARD) == keybd)) &&
             ((dev->kbdfeed && dev->kbdfeed->BellProc) || dev->xkb_interest)) {
 
-            rc = dixCallDeviceAccessCallback(client, dev, DixBellAccess);
+            int rc = dixCallDeviceAccessCallback(client, dev, DixBellAccess);
             if (rc != Success)
                 return rc;
             XkbHandleBell(FALSE, FALSE, dev, newpercent,
